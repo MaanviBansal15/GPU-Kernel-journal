@@ -54,9 +54,10 @@ pip install torch triton
 * Practiced first kernel: *vector addition on GPU*.
 * Worked on Pinned and Unified Memory.
 
-📂 Code: [`Vector_addition.cu`](Day 01/Vector_addition.cu)
-📂 Code: [`Pinned_memory_Vector_addition.cu`](Day 01/Pinned_memory_Vector_addition.cu)
-📂 Code: [`Unified_memory_Vector_addition.cu`](Day 01/Unified_memory_Vector_Addition)
+📂 Code: [Vector_addition.cu](Day%2001/Vector_addition.cu)  
+📂 Code: [Pinned_memory_Vector_addition.cu](Day%2001/Pinned_memory_Vector_addition.cu)  
+📂 Code: [Unified_memory_Vector_addition.cu](Day%2001/Unified_memory_Vector_addition.cu)  
+
 
 🔗 Resources:
 
