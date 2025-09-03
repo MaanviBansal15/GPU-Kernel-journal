@@ -52,8 +52,12 @@ pip install torch triton
 * Installed **CUDA Toolkit** and set up VS Code with WSL.
 * Learned about **threads, blocks, and grids** in GPU execution.
 * Practiced first kernel: *vector addition on GPU*.
+* Worked on Pinned and Unified Memory.
 
-📂 Code: [`day1_vector_addition.cu`](day1_vector_addition.cu)
+📂 Code: [`Vector_addition.cu`](day1_vector_addition.cu)
+📂 Code: [`Pinned_memory_Vector_addition.cu`](Pinned_memory)
+📂 Code: [`Unified_memory_Vector_addition.cu`](Unified_memory)
+
 🔗 Resources:
 
 * [NVIDIA CUDA Programming Model Intro](https://developer.nvidia.com/cuda-zone)
