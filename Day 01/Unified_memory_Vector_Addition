@@ -1,0 +1,73 @@
+/*
+
+Normally, CPU and GPU each have their own separate memory.
+That means you’d copy data back and forth manually (CPU → GPU, GPU → CPU).  
+
+Unified Memory makes life easier:
+- One memory space shared by both CPU and GPU.
+-You allocate once, and both can access it.  
+-CUDA runtime automatically moves data between CPU and GPU when needed.  
+
+This example adds two large arrays on the GPU using unified memory.
+*/
+
+#include <cassert>
+#include <iostream>
+#include <cstdlib>  // for rand()
+
+using namespace std;
+
+// CUDA kernel for vector addition
+// Each GPU thread computes one element of the sum
+__global__ void vectorAdd(int *a, int *b, int *c, int N) {
+  int tid = (blockDim.x * blockIdx.x) + threadIdx.x;
+
+  // Make sure we don’t go out of bounds
+  if (tid < N) {
+    c[tid] = a[tid] + b[tid];
+  }
+}
+
+int main() {
+  // Number of elements (2^16 = 65536)
+  const int N = 1 << 16;
+  size_t bytes = N * sizeof(int);
+
+  // Allocate unified memory (CPU + GPU share this)
+  int *a, *b, *c;
+  cudaMallocManaged(&a, bytes);
+  cudaMallocManaged(&b, bytes);
+  cudaMallocManaged(&c, bytes);
+  
+  // Fill arrays with random numbers
+  for (int i = 0; i < N; i++) {
+    a[i] = rand() % 100;
+    b[i] = rand() % 100;
+  }
+  
+  // Threads per block (1024)
+  int BLOCK_SIZE = 1 << 10;
+
+  // Number of blocks (round up if N not divisible by BLOCK_SIZE)
+  int GRID_SIZE = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
+
+  // Launch kernel on the GPU
+  vectorAdd<<<GRID_SIZE, BLOCK_SIZE>>>(a, b, c, N);
+
+  // Wait for GPU to finish before using results
+  cudaDeviceSynchronize();
+
+  // Verify results on CPU
+  for (int i = 0; i < N; i++) {
+    assert(c[i] == a[i] + b[i]);
+  }
+  
+  // Free unified memory
+  cudaFree(a);
+  cudaFree(b);
+  cudaFree(c);
+
+  cout << "COMPLETED SUCCESSFULLY!\n";
+
+  return 0;
+}
